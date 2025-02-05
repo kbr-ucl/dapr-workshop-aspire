@@ -1,3 +1,4 @@
+using Dapr;
 using Microsoft.AspNetCore.Mvc;
 using PizzaOrder.Models;
 using PizzaOrder.Services;
@@ -54,12 +55,13 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost("/orders-sub")]
-    public async Task<IActionResult> HandleOrderUpdate(CloudEvent<Order> cloudEvent)
+    [Topic("pizzapubsub", "orders")]
+    public async Task<IActionResult> HandleOrderUpdate(Order cloudEvent)
     {
         _logger.LogInformation("Received order update for order {OrderId}", 
-            cloudEvent.Data.OrderId);
+            cloudEvent.OrderId);
 
-        var result = await _orderStateService.UpdateOrderStateAsync(cloudEvent.Data);
+        var result = await _orderStateService.UpdateOrderStateAsync(cloudEvent);
         return Ok();
     }
 }

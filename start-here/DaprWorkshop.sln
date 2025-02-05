@@ -16,9 +16,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
 	ProjectSection(SolutionItems) = preProject
 		Endpoints.http = Endpoints.http
-		resources\pubsub.yaml = resources\pubsub.yaml
-		resources\statestore.yaml = resources\statestore.yaml
-		resources\subscription.yaml = resources\subscription.yaml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DaprWorkshop.AppHost", "DaprWorkshop.AppHost\DaprWorkshop.AppHost.csproj", "{2402FF09-3D34-468D-91AC-4DEF2DD788FD}"
@@ -62,5 +59,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D39E220D-C054-44A0-AF70-177D05E6CF10}
 	EndGlobalSection
 EndGlobal
