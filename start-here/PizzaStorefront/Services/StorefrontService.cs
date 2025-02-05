@@ -43,29 +43,29 @@ public class StorefrontService : IStorefrontService
                 await Task.Delay(TimeSpan.FromSeconds(duration));
             }
 
-            _logger.LogInformation("Starting cooking process for order {OrderId}", order.OrderId);
+            //_logger.LogInformation("Starting cooking process for order {OrderId}", order.OrderId);
 
-            // Use the Service Invocation building block to invoke the endpoint in the pizza-kitchen service
-            var response = await _daprClient.InvokeMethodAsync<Order, Order>(
-                HttpMethod.Post,
-                "pizza-kitchen",
-                "cook",
-                order);
+            //// Use the Service Invocation building block to invoke the endpoint in the pizza-kitchen service
+            //var response = await _daprClient.InvokeMethodAsync<Order, Order>(
+            //    HttpMethod.Post,
+            //    "pizza-kitchen",
+            //    "cook",
+            //    order);
 
-            _logger.LogInformation("Order {OrderId} cooked with status {Status}",
-                order.OrderId, response.Status);
+            //_logger.LogInformation("Order {OrderId} cooked with status {Status}",
+            //    order.OrderId, response.Status);
 
-            // Use the Service Invocation building block to invoke the endpoint in the pizza-delivery service
-            _logger.LogInformation("Starting delivery process for order {OrderId}", order.OrderId);
+            //// Use the Service Invocation building block to invoke the endpoint in the pizza-delivery service
+            //_logger.LogInformation("Starting delivery process for order {OrderId}", order.OrderId);
 
-            response = await _daprClient.InvokeMethodAsync<Order, Order>(
-                HttpMethod.Post,
-                "pizza-delivery",
-                "delivery",
-                order);
+            //response = await _daprClient.InvokeMethodAsync<Order, Order>(
+            //    HttpMethod.Post,
+            //    "pizza-delivery",
+            //    "delivery",
+            //    order);
 
-            _logger.LogInformation("Order {OrderId} delivered with status {Status}",
-                order.OrderId, response.Status);
+            //_logger.LogInformation("Order {OrderId} delivered with status {Status}",
+            //    order.OrderId, response.Status);
 
             return order;
         }

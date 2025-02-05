@@ -26,8 +26,13 @@ public class WorkflowController : ControllerBase
         try
         {
             _logger.LogInformation("Starting workflow for order {OrderId}", order.OrderId);
-            
+
             //TODO: Start the PizzaOrderingWorkflow workflow
+            await _daprClient.StartWorkflowAsync(
+                workflowComponent: "dapr",
+                workflowName: nameof(PizzaOrderingWorkflow),
+                input: order,
+                instanceId: instanceId);
 
             _logger.LogInformation("Workflow started successfully for order {OrderId}", order.OrderId);
 
@@ -56,6 +61,11 @@ public class WorkflowController : ControllerBase
                 validation.OrderId, validation.Approved);
 
             //TODO: Raise the ValidationComplete event
+            await _daprClient.RaiseWorkflowEventAsync(
+                instanceId: instanceId,
+                workflowComponent: "dapr",
+                eventName: "ValidationComplete",
+                eventData: validation);
 
             _logger.LogInformation("Validation event raised successfully for order {OrderId}", 
                 validation.OrderId);
@@ -83,6 +93,9 @@ public class WorkflowController : ControllerBase
             _logger.LogInformation("Getting workflow status for order {OrderId}", request.OrderId);
 
             //TODO: Get workflow status
+            var status = await _daprClient.GetWorkflowAsync(
+                instanceId: instanceId,
+                workflowComponent: "dapr");
 
             _logger.LogInformation("Workflow status retrieved successfully for order {OrderId}", request.OrderId);
 
@@ -109,6 +122,9 @@ public class WorkflowController : ControllerBase
             _logger.LogInformation("Pausing workflow for order {OrderId}", request.OrderId);
 
             //TODO: Pause workflow
+            await _daprClient.PauseWorkflowAsync(
+                instanceId: instanceId,
+                workflowComponent: "dapr");
 
             _logger.LogInformation("Workflow paused successfully for order {OrderId}", request.OrderId);
 
@@ -135,6 +151,9 @@ public class WorkflowController : ControllerBase
             _logger.LogInformation("Resuming workflow for order {OrderId}", request.OrderId);
 
             //TODO: Resume workflow
+            await _daprClient.ResumeWorkflowAsync(
+                instanceId: instanceId,
+                workflowComponent: "dapr");
 
             _logger.LogInformation("Workflow resumed successfully for order {OrderId}", request.OrderId);
 
@@ -161,6 +180,9 @@ public class WorkflowController : ControllerBase
             _logger.LogInformation("Cancelling workflow for order {OrderId}", request.OrderId);
 
             // TODO: Implement workflow termination call
+            await _daprClient.TerminateWorkflowAsync(
+                instanceId: instanceId,
+                workflowComponent: "dapr");
 
             _logger.LogInformation("Workflow cancelled successfully for order {OrderId}", request.OrderId);
 

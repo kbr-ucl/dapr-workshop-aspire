@@ -1,0 +1,31 @@
+version: 1
+common:
+  resourcesPath: ./resources
+  # Uncomment the following line if you are running Consul for service naming resolution
+  # configFilePath: ./resources/config/config.yaml
+apps:
+  - appDirPath: ./PizzaOrder/
+    appID: pizza-order
+    daprHTTPPort: 3501
+    appPort: 8001
+    command: ["dotnet", "run"]
+  - appDirPath: ./PizzaStorefront/
+    appID: pizza-storefront
+    daprHTTPPort: 3502
+    appPort: 8002
+    command: ["dotnet", "run"]
+  - appDirPath: ./PizzaKitchen/
+    appID: pizza-kitchen
+    appPort: 8003
+    daprHTTPPort: 3503
+    command: ["dotnet", "run"]
+  - appDirPath: ./PizzaDelivery/
+    appID: pizza-delivery
+    appPort: 8004
+    daprHTTPPort: 3504
+    command: ["dotnet", "run"]
+  - appDirPath: ./PizzaWorkflow/
+    appID: pizza-workflow
+    appPort: 8005
+    daprHTTPPort: 3505
+    command: ["dotnet", "run"]
