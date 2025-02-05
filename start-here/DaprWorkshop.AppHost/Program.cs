@@ -1,5 +1,7 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
+var statestore = builder.AddDaprStateStore("pizzastatestore");
+
 builder.AddProject<Projects.PizzaStorefront>("pizzastorefront");
 
 builder.AddProject<Projects.PizzaDelivery>("pizzadelivery");
