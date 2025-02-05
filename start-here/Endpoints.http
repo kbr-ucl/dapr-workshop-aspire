@@ -85,7 +85,7 @@ POST {{workflow_dapr_url}}/v1.0-beta1/workflows/dapr/PizzaOrderingWorkflow/start
 Content-Type: application/json
 
 {
-    "orderId": "3",
+    "orderId": "1",
     "pizzaType": "pepperoni",
     "size": "large",
     "customer": {
