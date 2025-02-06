@@ -22,7 +22,7 @@ if (app.Environment.IsDevelopment())
 app.UseCloudEvents();
 
 // needed for Dapr pub/sub routing
-// app.MapSubscribeHandler();
+app.MapSubscribeHandler();
 
 app.MapControllers();
 app.Run();

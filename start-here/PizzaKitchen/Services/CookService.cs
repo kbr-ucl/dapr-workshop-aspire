@@ -1,11 +1,11 @@
 using Dapr.Client;
-using PizzaShared.Messages.StoreFront;
+using PizzaShared.Messages.Kitchen;
 
 namespace PizzaKitchen.Services;
 
 public interface ICookService
 {
-    Task<OrderResultMessage> CookPizzaAsync(OrderMessage order);
+    Task<CookResultMessage> CookPizzaAsync(CookMessage order);
 }
 
 public class CookService : ICookService
@@ -22,7 +22,7 @@ public class CookService : ICookService
         _logger = logger;
     }
 
-    public async Task<OrderResultMessage> CookPizzaAsync(OrderMessage orderMessage)
+    public async Task<CookResultMessage> CookPizzaAsync(CookMessage cookMessage)
     {
         var stages = new (string status, int duration)[]
         {
@@ -33,10 +33,10 @@ public class CookService : ICookService
             ("cooking_quality_check", 1)
         };
 
-        var order = new OrderResultMessage
+        var order = new CookResultMessage
         {
-            WorkflowId = orderMessage.WorkflowId,
-            OrderId = orderMessage.OrderId,
+            WorkflowId = cookMessage.WorkflowId,
+            OrderId = cookMessage.OrderId,
             Status = "unknown"
         };
 
@@ -45,22 +45,22 @@ public class CookService : ICookService
             foreach (var (status, duration) in stages)
             {
                 order.Status = status;
-                _logger.LogInformation("Order {OrderId} - {Status}", orderMessage.OrderId, status);
+                _logger.LogInformation("Order {OrderId} - {Status}", cookMessage.OrderId, status);
 
-                await _daprClient.PublishEventAsync(PUBSUB_NAME, TOPIC_NAME, orderMessage);
+                await _daprClient.PublishEventAsync(PUBSUB_NAME, TOPIC_NAME, cookMessage);
                 await Task.Delay(TimeSpan.FromSeconds(duration));
             }
 
             order.Status = "cooked";
-            await _daprClient.PublishEventAsync(PUBSUB_NAME, TOPIC_NAME, orderMessage);
+            await _daprClient.PublishEventAsync(PUBSUB_NAME, TOPIC_NAME, cookMessage);
             return order;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error cooking order {OrderId}", orderMessage.OrderId);
+            _logger.LogError(ex, "Error cooking order {OrderId}", cookMessage.OrderId);
             order.Status = "cooking_failed";
             order.Error = ex.Message;
-            await _daprClient.PublishEventAsync(PUBSUB_NAME, TOPIC_NAME, orderMessage);
+            await _daprClient.PublishEventAsync(PUBSUB_NAME, TOPIC_NAME, cookMessage);
             return order;
         }
     }

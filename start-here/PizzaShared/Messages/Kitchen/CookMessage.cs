@@ -1,6 +1,6 @@
-﻿namespace PizzaShared.Messages.StoreFront;
+﻿namespace PizzaShared.Messages.Kitchen;
 
-public class OrderMessage : WorkflowMessage
+public class CookMessage : WorkflowMessage
 {
     public string OrderId { get; set; }
     public string PizzaType { get; set; }
@@ -8,10 +8,9 @@ public class OrderMessage : WorkflowMessage
     public Customer Customer { get; set; }
 }
 
-public class OrderResultMessage : WorkflowMessage
+public class CookResultMessage : WorkflowMessage
 {
     public string OrderId { get; set; }
     public string Status { get; set; }
     public string? Error { get; set; }
 }
-
