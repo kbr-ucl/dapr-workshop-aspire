@@ -1,5 +1,7 @@
+using Dapr;
 using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
+using PizzaShared.Messages;
 using PizzaWorkflow.Models;
 using PizzaWorkflow.Workflows;
 
@@ -197,5 +199,29 @@ public class WorkflowController : ControllerBase
             _logger.LogError(ex, "Failed to cancel workflow for order {OrderId}", request.OrderId);
             throw;
         }
+    }
+
+    [HttpPost("order-status")]
+    [Topic("pizzapubsub", "workflow")]
+    public async Task<IActionResult> OrderStatus(WorkflowMessage message)
+    {
+        _logger.LogInformation($"Received workflow status for workflow {message.WorkflowId}");
+
+        switch (message) // Switching by object is not supported before C# 7.0
+        {
+            case OrderResultMessage _: // typeof does not work here in any C# version
+                await _daprClient.RaiseWorkflowEventAsync(
+                    instanceId: message.WorkflowId,
+                    workflowComponent: "dapr",
+                    eventName: "OrderComplete",
+                    eventData: message as OrderResultMessage);
+                break;
+  
+            default:
+                _logger.LogError($"Received message type unknown {message.GetType().FullName}");
+                break;
+        }
+
+        return Ok(message);
     }
 }

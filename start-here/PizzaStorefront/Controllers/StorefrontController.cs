@@ -1,5 +1,7 @@
+using Dapr;
+using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
-using PizzaStorefront.Models;
+using PizzaShared.Messages.StoreFront;
 using PizzaStorefront.Services;
 
 namespace PizzaStorefront.Controllers;
@@ -8,20 +10,26 @@ namespace PizzaStorefront.Controllers;
 [Route("[controller]")]
 public class StorefrontController : ControllerBase
 {
-    private readonly IStorefrontService _storefrontService;
+    private readonly DaprClient _daprClient;
     private readonly ILogger<StorefrontController> _logger;
+    private readonly IStorefrontService _storefrontService;
 
-    public StorefrontController(IStorefrontService storefrontService, ILogger<StorefrontController> logger)
+    public StorefrontController(IStorefrontService storefrontService, ILogger<StorefrontController> logger,
+        DaprClient daprClient)
     {
+        _daprClient = daprClient;
         _storefrontService = storefrontService;
         _logger = logger;
     }
 
-    [HttpPost("order")]
-    public async Task<ActionResult<Order>> CreateOrder(Order order)
+    [Topic("pizzapubsub", "storefront")]
+    public async Task<IActionResult> CreateOrder(OrderMessage order)
     {
         _logger.LogInformation("Received new order: {OrderId}", order.OrderId);
         var result = await _storefrontService.ProcessOrderAsync(order);
-        return Ok(result);
+
+        await _daprClient.PublishEventAsync("pizzapubsub", "workflow", result);
+
+        return Ok();
     }
 }

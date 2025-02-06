@@ -2,6 +2,8 @@
 using PizzaWorkflow.Models;
 using PizzaWorkflow.Activities;
 using Microsoft.Extensions.Logging;
+using PizzaShared.Messages;
+using PizzaShared.Messages.StoreFront;
 
 namespace PizzaWorkflow.Workflows;
 
@@ -12,10 +14,11 @@ public class PizzaOrderingWorkflow : Workflow<Order, Order>
         try
         {
             // Step 1: Place and process the order
-            var orderResult = await context.CallActivityAsync<Order>(
+            await context.CallActivityAsync<Order>(
               nameof(StorefrontActivity),
               order);
 
+            var orderResult = await context.WaitForExternalEventAsync<OrderResultMessage>("OrderComplete");
             if (orderResult.Status != "confirmed")
             {
                 throw new Exception($"Order failed: {orderResult.Error ?? "Unknown error"}");

@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DaprWorkshop.AppHost", "Dap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DaprWorkshop.ServiceDefaults", "DaprWorkshop.ServiceDefaults\DaprWorkshop.ServiceDefaults.csproj", "{DA025439-1CC0-3C60-A7ED-E799A5275CB7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaShared", "PizzaShared\PizzaShared.csproj", "{7054FD47-C3F1-4459-B0DB-1C65E4E954BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,10 +53,6 @@ Global
 		{A0E3DCD7-5D2E-4EAC-B97F-0F079B2CBBBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0E3DCD7-5D2E-4EAC-B97F-0F079B2CBBBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0E3DCD7-5D2E-4EAC-B97F-0F079B2CBBBA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D1786E2B-CAA0-4B2D-A974-9845EB9E420F}.Debug|Any CPU.ActiveCfg = Debug
-		{D1786E2B-CAA0-4B2D-A974-9845EB9E420F}.Debug|Any CPU.Build.0 = Debug
-		{D1786E2B-CAA0-4B2D-A974-9845EB9E420F}.Release|Any CPU.ActiveCfg = Release
-		{D1786E2B-CAA0-4B2D-A974-9845EB9E420F}.Release|Any CPU.Build.0 = Release
 		{E4AD8E69-755D-4124-A615-1840E970990A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E4AD8E69-755D-4124-A615-1840E970990A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4AD8E69-755D-4124-A615-1840E970990A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -63,6 +61,14 @@ Global
 		{DA025439-1CC0-3C60-A7ED-E799A5275CB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA025439-1CC0-3C60-A7ED-E799A5275CB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA025439-1CC0-3C60-A7ED-E799A5275CB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1786E2B-CAA0-4B2D-A974-9845EB9E420F}.Debug|Any CPU.ActiveCfg = Debug
+		{D1786E2B-CAA0-4B2D-A974-9845EB9E420F}.Debug|Any CPU.Build.0 = Debug
+		{D1786E2B-CAA0-4B2D-A974-9845EB9E420F}.Release|Any CPU.ActiveCfg = Release
+		{D1786E2B-CAA0-4B2D-A974-9845EB9E420F}.Release|Any CPU.Build.0 = Release
+		{7054FD47-C3F1-4459-B0DB-1C65E4E954BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7054FD47-C3F1-4459-B0DB-1C65E4E954BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7054FD47-C3F1-4459-B0DB-1C65E4E954BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7054FD47-C3F1-4459-B0DB-1C65E4E954BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
