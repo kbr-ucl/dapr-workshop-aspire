@@ -37,6 +37,9 @@ public class DeliveryService : IDeliveryService
         {
             WorkflowId = deliverMessage.WorkflowId,
             OrderId = deliverMessage.OrderId,
+            PizzaType = deliverMessage.PizzaType,
+            Size = deliverMessage.Size,
+            Customer = deliverMessage.Customer,
             Status = "unknown"
         };
 

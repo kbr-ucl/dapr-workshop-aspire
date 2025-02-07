@@ -1,5 +1,6 @@
 using Dapr.Client;
 using PizzaShared.Messages.Kitchen;
+using PizzaShared.Messages.StoreFront;
 
 namespace PizzaKitchen.Services;
 
@@ -37,6 +38,9 @@ public class CookService : ICookService
         {
             WorkflowId = cookMessage.WorkflowId,
             OrderId = cookMessage.OrderId,
+            PizzaType = cookMessage.PizzaType,
+            Size = cookMessage.Size,
+            Customer = cookMessage.Customer,
             Status = "unknown"
         };
 

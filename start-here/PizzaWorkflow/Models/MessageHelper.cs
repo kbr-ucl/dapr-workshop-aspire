@@ -9,7 +9,7 @@ public class MessageHelper
     {
         var result = new T();
 
-        var customer = new Customer
+        var customer = new CustomerDto
         {
             Address = order.Customer.Address,
             Name = order.Customer.Name,
@@ -19,7 +19,7 @@ public class MessageHelper
         var examType = typeof(T);
         // Change the instance property value.
         var workflowId = examType.GetProperty("WorkflowId");
-        workflowId.SetValue(result, order.OrderId);
+        workflowId.SetValue(result, context.InstanceId);
 
         // Change the instance property value.
         var orderId = examType.GetProperty("OrderId");
@@ -44,7 +44,9 @@ public class MessageHelper
         var orderId = (string)examType.GetProperty("OrderId").GetValue(message);
         var pizzaType = (string)examType.GetProperty("PizzaType").GetValue(message);
         var size = (string)examType.GetProperty("Size").GetValue(message);
- 
+        var status = (string)examType.GetProperty("Status").GetValue(message);
+        var error = (string)examType.GetProperty("Error").GetValue(message) ?? String.Empty;
+
         var customerDto = (CustomerDto)examType.GetProperty("Customer").GetValue(message); 
         
         var customer = new Customer
@@ -53,7 +55,7 @@ public class MessageHelper
             Name = customerDto.Name,
             Phone = customerDto.Phone
         };
-        var result = new Order { OrderId = orderId, PizzaType = pizzaType, Size = size, Customer = customer };
+        var result = new Order { OrderId = orderId, PizzaType = pizzaType, Size = size, Customer = customer, Status = status, Error = error};
 
         return result;
     }

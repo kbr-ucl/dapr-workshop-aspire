@@ -34,6 +34,9 @@ public class StorefrontService : IStorefrontService
         {
             WorkflowId = orderMessage.WorkflowId,
             OrderId = orderMessage.OrderId,
+            PizzaType = orderMessage.PizzaType,
+            Size = orderMessage.Size,
+            Customer = orderMessage.Customer,
             Status = "unknown"
         };
 

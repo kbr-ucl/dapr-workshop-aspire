@@ -28,7 +28,7 @@ public class DeliveryController : ControllerBase
         _logger.LogInformation("Starting delivery for order: {OrderId}", deliverMessage.OrderId);
         var result = await _deliveryService.DeliverPizzaAsync(deliverMessage);
 
-        await _daprClient.PublishEventAsync("pizzapubsub", "workflow", result);
+        await _daprClient.PublishEventAsync("pizzapubsub", "workflow-delivery", result);
 
         return Ok();
     }

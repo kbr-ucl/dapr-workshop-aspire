@@ -27,7 +27,7 @@ public class CookController : ControllerBase
         _logger.LogInformation("Starting cooking for order: {OrderId}", cookMessage.OrderId);
         var result = await _cookService.CookPizzaAsync(cookMessage);
 
-        await _daprClient.PublishEventAsync("pizzapubsub", "workflow", result);
+        await _daprClient.PublishEventAsync("pizzapubsub", "workflow-kitchen", result);
 
         return Ok();
     }

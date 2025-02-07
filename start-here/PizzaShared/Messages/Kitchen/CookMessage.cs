@@ -8,9 +8,8 @@ public class CookMessage : WorkflowMessage
     public CustomerDto Customer { get; set; }
 }
 
-public class CookResultMessage : WorkflowMessage
+public class CookResultMessage : CookMessage
 {
-    public string OrderId { get; set; }
     public string Status { get; set; }
     public string? Error { get; set; }
 }

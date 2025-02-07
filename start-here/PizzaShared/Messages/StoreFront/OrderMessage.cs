@@ -8,9 +8,8 @@ public class OrderMessage : WorkflowMessage
     public CustomerDto Customer { get; set; }
 }
 
-public class OrderResultMessage : WorkflowMessage
+public class OrderResultMessage : OrderMessage
 {
-    public string OrderId { get; set; }
     public string Status { get; set; }
     public string? Error { get; set; }
 }

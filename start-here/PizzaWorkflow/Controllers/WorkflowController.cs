@@ -1,7 +1,6 @@
 using Dapr;
 using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
-using PizzaShared.Messages;
 using PizzaShared.Messages.Delivery;
 using PizzaShared.Messages.Kitchen;
 using PizzaShared.Messages.StoreFront;
@@ -27,15 +26,15 @@ public class WorkflowController : ControllerBase
     public async Task<IActionResult> StartOrder(Order order)
     {
         var instanceId = $"pizza-order-{order.OrderId}";
-        
+
         try
         {
             _logger.LogInformation("Starting workflow for order {OrderId}", order.OrderId);
 
             //TODO: Start the PizzaOrderingWorkflow workflow
             await _daprClient.StartWorkflowAsync(
-                workflowComponent: "dapr",
-                workflowName: nameof(PizzaOrderingWorkflow),
+                "dapr",
+                nameof(PizzaOrderingWorkflow),
                 input: order,
                 instanceId: instanceId);
 
@@ -59,20 +58,20 @@ public class WorkflowController : ControllerBase
     public async Task<IActionResult> ValidatePizza(ValidationRequest validation)
     {
         var instanceId = $"pizza-order-{validation.OrderId}";
-        
+
         try
         {
-            _logger.LogInformation("Raising validation event for order {OrderId}. Approved: {Approved}", 
+            _logger.LogInformation("Raising validation event for order {OrderId}. Approved: {Approved}",
                 validation.OrderId, validation.Approved);
 
             //TODO: Raise the ValidationComplete event
             await _daprClient.RaiseWorkflowEventAsync(
-                instanceId: instanceId,
-                workflowComponent: "dapr",
-                eventName: "ValidationComplete",
-                eventData: validation);
+                instanceId,
+                "dapr",
+                "ValidationComplete",
+                validation);
 
-            _logger.LogInformation("Validation event raised successfully for order {OrderId}", 
+            _logger.LogInformation("Validation event raised successfully for order {OrderId}",
                 validation.OrderId);
 
             return Ok(new
@@ -92,15 +91,15 @@ public class WorkflowController : ControllerBase
     public async Task<IActionResult> GetOrderStatus(ManageWorkflowRequest request)
     {
         var instanceId = $"pizza-order-{request.OrderId}";
-        
+
         try
         {
             _logger.LogInformation("Getting workflow status for order {OrderId}", request.OrderId);
 
             //TODO: Get workflow status
             var status = await _daprClient.GetWorkflowAsync(
-                instanceId: instanceId,
-                workflowComponent: "dapr");
+                instanceId,
+                "dapr");
 
             _logger.LogInformation("Workflow status retrieved successfully for order {OrderId}", request.OrderId);
 
@@ -121,15 +120,15 @@ public class WorkflowController : ControllerBase
     public async Task<IActionResult> PauseOrder(ManageWorkflowRequest request)
     {
         var instanceId = $"pizza-order-{request.OrderId}";
-        
+
         try
         {
             _logger.LogInformation("Pausing workflow for order {OrderId}", request.OrderId);
 
             //TODO: Pause workflow
             await _daprClient.PauseWorkflowAsync(
-                instanceId: instanceId,
-                workflowComponent: "dapr");
+                instanceId,
+                "dapr");
 
             _logger.LogInformation("Workflow paused successfully for order {OrderId}", request.OrderId);
 
@@ -150,15 +149,15 @@ public class WorkflowController : ControllerBase
     public async Task<IActionResult> ResumeOrder(ManageWorkflowRequest request)
     {
         var instanceId = $"pizza-order-{request.OrderId}";
-        
+
         try
         {
             _logger.LogInformation("Resuming workflow for order {OrderId}", request.OrderId);
 
             //TODO: Resume workflow
             await _daprClient.ResumeWorkflowAsync(
-                instanceId: instanceId,
-                workflowComponent: "dapr");
+                instanceId,
+                "dapr");
 
             _logger.LogInformation("Workflow resumed successfully for order {OrderId}", request.OrderId);
 
@@ -176,18 +175,18 @@ public class WorkflowController : ControllerBase
     }
 
     [HttpPost("cancel-order")]
-    public async Task<IActionResult> CancelOrder( ManageWorkflowRequest request)
+    public async Task<IActionResult> CancelOrder(ManageWorkflowRequest request)
     {
         var instanceId = $"pizza-order-{request.OrderId}";
-        
+
         try
         {
             _logger.LogInformation("Cancelling workflow for order {OrderId}", request.OrderId);
 
             // TODO: Implement workflow termination call
             await _daprClient.TerminateWorkflowAsync(
-                instanceId: instanceId,
-                workflowComponent: "dapr");
+                instanceId,
+                "dapr");
 
             _logger.LogInformation("Workflow cancelled successfully for order {OrderId}", request.OrderId);
 
@@ -205,44 +204,41 @@ public class WorkflowController : ControllerBase
     }
 
     [HttpPost("order-status")]
-    [Topic("pizzapubsub", "workflow")]
-    public async Task<IActionResult> OrderStatus(WorkflowMessage message)
+    [Topic("pizzapubsub", "workflow-storefront")]
+    public async Task<IActionResult> OrderStatus(OrderResultMessage message)
     {
         _logger.LogInformation($"Received workflow status for workflow {message.WorkflowId}");
-        Order order;
-
-        switch (message) // Switching by object is not supported before C# 7.0
-        {
-            case OrderResultMessage _: // typeof does not work here in any C# version
-                order = MessageHelper.FillOrder<OrderResultMessage>(message as OrderResultMessage);
-                await RaiseEventAsync("OrderComplete", order, message.WorkflowId);
-                break;
-
-            case CookResultMessage _: // typeof does not work here in any C# version
-                order = MessageHelper.FillOrder<CookResultMessage>(message as CookResultMessage);
-                await RaiseEventAsync("CookComplete", order, message.WorkflowId);
-                break;
-
-            case DeliverResultMessage _: // typeof does not work here in any C# version
-                order = MessageHelper.FillOrder<DeliverResultMessage>(message as DeliverResultMessage);
-                await RaiseEventAsync("DeliverComplete", order, message.WorkflowId);
-                break;
-
-            default:
-                _logger.LogError($"Received message type unknown {message.GetType().FullName}");
-                break;
-        }
-
+        var order = MessageHelper.FillOrder(message);
+        await RaiseEventAsync("OrderComplete", order, message.WorkflowId);
         return Ok(message);
     }
 
-    
+    [HttpPost("cook-status")]
+    [Topic("pizzapubsub", "workflow-kitchen")]
+    public async Task<IActionResult> CookStatus(CookResultMessage message)
+    {
+        _logger.LogInformation($"Received workflow status for workflow {message.WorkflowId}");
+        var order = MessageHelper.FillOrder(message);
+        await RaiseEventAsync("CookComplete", order, message.WorkflowId);
+        return Ok(message);
+    }
+
+    [HttpPost("deliver-status")]
+    [Topic("pizzapubsub", "workflow-delivery")]
+    public async Task<IActionResult> DeliverStatus(DeliverResultMessage message)
+    {
+        _logger.LogInformation($"Received workflow status for workflow {message.WorkflowId}");
+        var order = MessageHelper.FillOrder(message);
+        await RaiseEventAsync("DeliverComplete", order, message.WorkflowId);
+        return Ok(message);
+    }
+
     private async Task RaiseEventAsync(string eventName, Order order, string workflowId)
     {
         await _daprClient.RaiseWorkflowEventAsync(
-            instanceId: workflowId,
-            workflowComponent: "dapr",
-            eventName: eventName,
-            eventData: order);
+            workflowId,
+            "dapr",
+            eventName,
+            order);
     }
 }
