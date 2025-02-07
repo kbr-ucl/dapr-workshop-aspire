@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace PizzaWorkflow.Models;
 
 public class Order

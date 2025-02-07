@@ -2,7 +2,6 @@
 using Dapr.Workflow;
 using PizzaShared.Messages.StoreFront;
 using PizzaWorkflow.Models;
-using Customer = PizzaShared.Messages.StoreFront.Customer;
 
 namespace PizzaWorkflow.Activities;
 
@@ -23,33 +22,15 @@ public class StorefrontActivity : WorkflowActivity<Order, object?>
         {
             _logger.LogInformation("Starting ordering process for order {OrderId}", order.OrderId);
 
-            var message = FillOrderMessage(context, order);
+            var message = MessageHelper.FillMessage<OrderMessage>(context, order);
 
             await _daprClient.PublishEventAsync("pizzapubsub", "storefront", message);
+            return null;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error processing order {OrderId}", order.OrderId);
             throw;
         }
-    }
-
-    private OrderMessage FillOrderMessage(WorkflowActivityContext context, Order order)
-    {
-        var result = new OrderMessage
-        {
-            WorkflowId = context.InstanceId,
-            OrderId = order.OrderId,
-            PizzaType = order.PizzaType,
-            Size = order.Size,
-            Customer = new Customer
-            {
-                Address = order.Customer.Address,
-                Name = order.Customer.Name,
-                Phone = order.Customer.Phone
-            }
-        };
-
-        return result;
     }
 }

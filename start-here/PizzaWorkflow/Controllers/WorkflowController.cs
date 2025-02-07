@@ -2,6 +2,9 @@ using Dapr;
 using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
 using PizzaShared.Messages;
+using PizzaShared.Messages.Delivery;
+using PizzaShared.Messages.Kitchen;
+using PizzaShared.Messages.StoreFront;
 using PizzaWorkflow.Models;
 using PizzaWorkflow.Workflows;
 
@@ -206,22 +209,40 @@ public class WorkflowController : ControllerBase
     public async Task<IActionResult> OrderStatus(WorkflowMessage message)
     {
         _logger.LogInformation($"Received workflow status for workflow {message.WorkflowId}");
+        Order order;
 
         switch (message) // Switching by object is not supported before C# 7.0
         {
             case OrderResultMessage _: // typeof does not work here in any C# version
-                await _daprClient.RaiseWorkflowEventAsync(
-                    instanceId: message.WorkflowId,
-                    workflowComponent: "dapr",
-                    eventName: "OrderComplete",
-                    eventData: message as OrderResultMessage);
+                order = MessageHelper.FillOrder<OrderResultMessage>(message as OrderResultMessage);
+                await RaiseEventAsync("OrderComplete", order, message.WorkflowId);
                 break;
-  
+
+            case CookResultMessage _: // typeof does not work here in any C# version
+                order = MessageHelper.FillOrder<CookResultMessage>(message as CookResultMessage);
+                await RaiseEventAsync("CookComplete", order, message.WorkflowId);
+                break;
+
+            case DeliverResultMessage _: // typeof does not work here in any C# version
+                order = MessageHelper.FillOrder<DeliverResultMessage>(message as DeliverResultMessage);
+                await RaiseEventAsync("DeliverComplete", order, message.WorkflowId);
+                break;
+
             default:
                 _logger.LogError($"Received message type unknown {message.GetType().FullName}");
                 break;
         }
 
         return Ok(message);
+    }
+
+    
+    private async Task RaiseEventAsync(string eventName, Order order, string workflowId)
+    {
+        await _daprClient.RaiseWorkflowEventAsync(
+            instanceId: workflowId,
+            workflowComponent: "dapr",
+            eventName: eventName,
+            eventData: order);
     }
 }

@@ -34,7 +34,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Dapr will send serialized event object vs. being raw CloudEvent
 app.UseCloudEvents();
+
+// needed for Dapr pub/sub routing
 app.MapSubscribeHandler();
 
 app.MapControllers();

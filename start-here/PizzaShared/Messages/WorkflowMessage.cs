@@ -5,7 +5,7 @@ public abstract class WorkflowMessage
     public string WorkflowId { get; set; }
 }
 
-public class Customer
+public class CustomerDto
 {
     public required string Name { get; set; }
     public required string Address { get; set; }
