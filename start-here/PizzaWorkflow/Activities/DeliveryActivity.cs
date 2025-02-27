@@ -1,10 +1,11 @@
 ﻿using Dapr.Client;
 using Dapr.Workflow;
+using PizzaShared.Messages.Delivery;
 using PizzaWorkflow.Models;
 
 namespace PizzaWorkflow.Activities;
 
-public class DeliveryActivity : WorkflowActivity<Order, Order>
+public class DeliveryActivity : WorkflowActivity<Order, object?>
 {
     private readonly DaprClient _daprClient;
     private readonly ILogger<DeliveryActivity> _logger;
@@ -15,26 +16,20 @@ public class DeliveryActivity : WorkflowActivity<Order, Order>
         _logger = logger;
     }
 
-    public override async Task<Order> RunAsync(WorkflowActivityContext context, Order order)
+    public override async Task<object?> RunAsync(WorkflowActivityContext context, Order order)
     {
         try
         {
-            _logger.LogInformation("Starting delivery process for order {OrderId}", order.OrderId);
+            _logger.LogInformation("Starting ordering process for order {OrderId}", order.OrderId);
 
-            var response = await _daprClient.InvokeMethodAsync<Order, Order>(
-                HttpMethod.Post,
-                "pizza-delivery",
-                "delivery",
-                order);
+            var message = MessageHelper.FillMessage<DeliverMessage>(context, order);
 
-            _logger.LogInformation("Order {OrderId} delivered with status {Status}",
-                order.OrderId, response.Status);
-
-            return response;
+            await _daprClient.PublishEventAsync("pizzapubsub", "delivery", message);
+            return null;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error delivering order {OrderId}", order.OrderId);
+            _logger.LogError(ex, "Error processing order {OrderId}", order.OrderId);
             throw;
         }
     }

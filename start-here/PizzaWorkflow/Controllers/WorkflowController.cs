@@ -1,5 +1,9 @@
+using Dapr;
 using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
+using PizzaShared.Messages.Delivery;
+using PizzaShared.Messages.Kitchen;
+using PizzaShared.Messages.StoreFront;
 using PizzaWorkflow.Models;
 using PizzaWorkflow.Workflows;
 
@@ -197,5 +201,44 @@ public class WorkflowController : ControllerBase
             _logger.LogError(ex, "Failed to cancel workflow for order {OrderId}", request.OrderId);
             throw;
         }
+    }
+
+    [HttpPost("order-status")]
+    [Topic("pizzapubsub", "workflow-storefront")]
+    public async Task<IActionResult> OrderStatus(OrderResultMessage message)
+    {
+        _logger.LogInformation($"Received workflow status for workflow {message.WorkflowId}");
+        var order = MessageHelper.FillOrder(message);
+        await RaiseEventAsync("OrderComplete", order, message.WorkflowId);
+        return Ok(message);
+    }
+
+    [HttpPost("cook-status")]
+    [Topic("pizzapubsub", "workflow-kitchen")]
+    public async Task<IActionResult> CookStatus(CookResultMessage message)
+    {
+        _logger.LogInformation($"Received workflow status for workflow {message.WorkflowId}");
+        var order = MessageHelper.FillOrder(message);
+        await RaiseEventAsync("CookComplete", order, message.WorkflowId);
+        return Ok(message);
+    }
+
+    [HttpPost("deliver-status")]
+    [Topic("pizzapubsub", "workflow-delivery")]
+    public async Task<IActionResult> DeliverStatus(DeliverResultMessage message)
+    {
+        _logger.LogInformation($"Received workflow status for workflow {message.WorkflowId}");
+        var order = MessageHelper.FillOrder(message);
+        await RaiseEventAsync("DeliverComplete", order, message.WorkflowId);
+        return Ok(message);
+    }
+
+    private async Task RaiseEventAsync(string eventName, Order order, string workflowId)
+    {
+        await _daprClient.RaiseWorkflowEventAsync(
+            workflowId,
+            "dapr",
+            eventName,
+            order);
     }
 }
