@@ -1,10 +1,10 @@
-using Aspire.Hosting.Dapr;
-
+using CommunityToolkit.Aspire.Hosting.Dapr;
+using Projects;
 
 var builder = DistributedApplication.CreateBuilder(args);
 var statestore = builder.AddDaprStateStore("pizzastatestore");
 
-builder.AddProject<Projects.PizzaOrder>("pizzaorderservice")
+builder.AddProject<PizzaOrder>("pizzaorderservice")
     .WithDaprSidecar(new DaprSidecarOptions
     {
         AppId = "pizza-order",
@@ -12,21 +12,21 @@ builder.AddProject<Projects.PizzaOrder>("pizzaorderservice")
     })
     .WithReference(statestore);
 
-builder.AddProject<Projects.PizzaKitchen>("pizzakitchenservice")
+builder.AddProject<PizzaKitchen>("pizzakitchenservice")
     .WithDaprSidecar(new DaprSidecarOptions
     {
         AppId = "pizza-kitchen",
         DaprHttpPort = 3503
     });
 
-builder.AddProject<Projects.PizzaStorefront>("pizzastorefrontservice")
+builder.AddProject<PizzaStorefront>("pizzastorefrontservice")
     .WithDaprSidecar(new DaprSidecarOptions
     {
         AppId = "pizza-storefront",
         DaprHttpPort = 3502
     });
 
-builder.AddProject<Projects.PizzaDelivery>("pizzadeliveryservice")
+builder.AddProject<PizzaDelivery>("pizzadeliveryservice")
     .WithDaprSidecar(new DaprSidecarOptions
     {
         AppId = "pizza-delivery",
