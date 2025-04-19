@@ -8,7 +8,7 @@ var pubsubComponent = builder.AddDaprPubSub("pizzapubsub");
 builder.AddProject<Projects.PizzaOrder>("pizzaorderservice")
     .WithDaprSidecar(new DaprSidecarOptions
     {
-        AppId = "pizza-order",
+        AppId = "pizzaorder",
         DaprHttpPort = 3501
     })
     .WithReference(statestore)
