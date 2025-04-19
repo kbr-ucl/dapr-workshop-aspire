@@ -1,0 +1,28 @@
+common:
+  resourcesPath: ./resources
+apps:
+- appDirPath: PizzaStorefront
+  appID: pizza-storefront
+  appPort: 8002
+  command:
+  - dotnet
+  - run
+- appDirPath: PizzaKitchen
+  appID: pizza-kitchen
+  appPort: 8003
+  command:
+  - dotnet
+  - run
+- appDirPath: PizzaDelivery
+  appID: pizza-delivery
+  appPort: 8004
+  command:
+  - dotnet
+  - run
+- appDirPath: PizzaOrder
+  appID: pizzaorder
+  appPort: 8001
+  command:
+  - dotnet
+  - run
+version: 1
