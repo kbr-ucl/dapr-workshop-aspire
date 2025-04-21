@@ -8,8 +8,8 @@ namespace PizzaOrder.Controllers;
 [Route("[controller]")]
 public class OrderController : ControllerBase
 {
-    private readonly IOrderStateService _orderStateService;
     private readonly ILogger<OrderController> _logger;
+    private readonly IOrderStateService _orderStateService;
 
     public OrderController(IOrderStateService orderStateService, ILogger<OrderController> logger)
     {
@@ -29,25 +29,19 @@ public class OrderController : ControllerBase
     public async Task<ActionResult<Order>> GetOrder(string orderId)
     {
         var order = await _orderStateService.GetOrderAsync(orderId);
-        
-        if (order == null)
-        {
-            return NotFound();
-        }
+
+        if (order == null) return NotFound();
 
         return Ok(order);
     }
 
-    
+
     [HttpDelete("{orderId}")]
     public async Task<ActionResult<string>> DeleteOrder(string orderId)
     {
         var order = await _orderStateService.GetOrderAsync(orderId);
-        
-        if (order == null)
-        {
-            return NotFound();
-        }
+
+        if (order == null) return NotFound();
 
         await _orderStateService.DeleteOrderAsync(orderId);
         return Ok(orderId);
@@ -56,7 +50,7 @@ public class OrderController : ControllerBase
     [HttpPost("/orders-sub")]
     public async Task<IActionResult> HandleOrderUpdate(CloudEvent<Order> cloudEvent)
     {
-        _logger.LogInformation("Received order update for order {OrderId}", 
+        _logger.LogInformation("Received order update for order {OrderId}",
             cloudEvent.Data.OrderId);
 
         var result = await _orderStateService.UpdateOrderStateAsync(cloudEvent.Data);

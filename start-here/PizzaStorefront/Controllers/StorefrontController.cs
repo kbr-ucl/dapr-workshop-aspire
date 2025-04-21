@@ -8,8 +8,8 @@ namespace PizzaStorefront.Controllers;
 [Route("[controller]")]
 public class StorefrontController : ControllerBase
 {
-    private readonly IStorefrontService _storefrontService;
     private readonly ILogger<StorefrontController> _logger;
+    private readonly IStorefrontService _storefrontService;
 
     public StorefrontController(IStorefrontService storefrontService, ILogger<StorefrontController> logger)
     {

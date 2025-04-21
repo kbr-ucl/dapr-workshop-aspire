@@ -1,5 +1,5 @@
-using PizzaKitchen.Models;
 using Dapr.Client;
+using PizzaKitchen.Models;
 
 namespace PizzaKitchen.Services;
 
@@ -10,11 +10,10 @@ public interface ICookService
 
 public class CookService : ICookService
 {
-    private readonly DaprClient _daprClient;
-    private readonly ILogger<CookService> _logger;
-
     private const string PUBSUB_NAME = "pizzapubsub";
     private const string TOPIC_NAME = "orders";
+    private readonly DaprClient _daprClient;
+    private readonly ILogger<CookService> _logger;
 
 
     public CookService(DaprClient daprClient, ILogger<CookService> logger)

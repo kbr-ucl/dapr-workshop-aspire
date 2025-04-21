@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace PizzaOrder.Models;
 
 public class Order

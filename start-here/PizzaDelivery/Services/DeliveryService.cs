@@ -1,5 +1,5 @@
-using PizzaDelivery.Models;
 using Dapr.Client;
+using PizzaDelivery.Models;
 
 namespace PizzaDelivery.Services;
 
@@ -10,11 +10,10 @@ public interface IDeliveryService
 
 public class DeliveryService : IDeliveryService
 {
-    private readonly DaprClient _daprClient;
-    private readonly ILogger<DeliveryService> _logger;
-
     private const string PUBSUB_NAME = "pizzapubsub";
     private const string TOPIC_NAME = "orders";
+    private readonly DaprClient _daprClient;
+    private readonly ILogger<DeliveryService> _logger;
 
     public DeliveryService(DaprClient daprClient, ILogger<DeliveryService> logger)
     {
@@ -59,4 +58,3 @@ public class DeliveryService : IDeliveryService
         }
     }
 }
-

@@ -1,6 +1,5 @@
-using PizzaOrder.Models;
-using System.Text.Json;
 using Dapr.Client;
+using PizzaOrder.Models;
 
 namespace PizzaOrder.Services;
 
@@ -32,10 +31,8 @@ public class OrderStateService : IOrderStateService
             // Try to get existing state
             var existingState = await _daprClient.GetStateAsync<Order>(STORE_NAME, stateKey);
             if (existingState != null)
-            {
                 // Merge new data with existing state
                 order = MergeOrderStates(existingState, order);
-            }
 
             // Save updated state
             await _daprClient.SaveStateAsync(STORE_NAME, stateKey, order);
@@ -98,7 +95,7 @@ public class OrderStateService : IOrderStateService
         update.Customer = update.Customer ?? existing.Customer;
         update.PizzaType = update.PizzaType ?? existing.PizzaType;
         update.Size = update.Size ?? existing.Size;
-        
+
         return update;
     }
 }
