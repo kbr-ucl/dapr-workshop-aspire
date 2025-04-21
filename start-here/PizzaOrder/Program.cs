@@ -21,7 +21,7 @@ if (app.Environment.IsDevelopment())
 // Dapr will send serialized event object vs. being raw CloudEvent
 app.UseCloudEvents();
 
-// needed for Dapr pub/sub routing
+// Needed for Programmatic Dapr pub/sub routing
 app.MapSubscribeHandler();
 
 app.MapControllers();

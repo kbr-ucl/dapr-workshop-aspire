@@ -34,3 +34,4 @@ public class StorefrontActivity : WorkflowActivity<Order, object?>
         }
     }
 }
+

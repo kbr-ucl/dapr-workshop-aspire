@@ -45,17 +45,20 @@ public class MessageHelper
         var pizzaType = (string)examType.GetProperty("PizzaType").GetValue(message);
         var size = (string)examType.GetProperty("Size").GetValue(message);
         var status = (string)examType.GetProperty("Status").GetValue(message);
-        var error = (string)examType.GetProperty("Error").GetValue(message) ?? String.Empty;
+        var error = (string)examType.GetProperty("Error").GetValue(message) ?? string.Empty;
 
-        var customerDto = (CustomerDto)examType.GetProperty("Customer").GetValue(message); 
-        
+        var customerDto = (CustomerDto)examType.GetProperty("Customer").GetValue(message);
+
         var customer = new Customer
         {
             Address = customerDto.Address,
             Name = customerDto.Name,
             Phone = customerDto.Phone
         };
-        var result = new Order { OrderId = orderId, PizzaType = pizzaType, Size = size, Customer = customer, Status = status, Error = error};
+        var result = new Order
+        {
+            OrderId = orderId, PizzaType = pizzaType, Size = size, Customer = customer, Status = status, Error = error
+        };
 
         return result;
     }

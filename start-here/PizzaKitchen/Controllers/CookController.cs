@@ -13,6 +13,7 @@ public class CookController : ControllerBase
     private readonly ICookService _cookService;
     private readonly DaprClient _daprClient;
     private readonly ILogger<CookController> _logger;
+    private readonly DaprClient _daprClient;
 
     public CookController(ICookService cookService, ILogger<CookController> logger, DaprClient daprClient)
     {

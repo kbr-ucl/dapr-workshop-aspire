@@ -10,16 +10,15 @@ namespace PizzaStorefront.Controllers;
 [Route("[controller]")]
 public class StorefrontController : ControllerBase
 {
-    private readonly DaprClient _daprClient;
-    private readonly ILogger<StorefrontController> _logger;
     private readonly IStorefrontService _storefrontService;
+    private readonly ILogger<StorefrontController> _logger;
+    private readonly DaprClient _daprClient;
 
-    public StorefrontController(IStorefrontService storefrontService, ILogger<StorefrontController> logger,
-        DaprClient daprClient)
+    public StorefrontController(IStorefrontService storefrontService, ILogger<StorefrontController> logger, DaprClient daprClient)
     {
-        _daprClient = daprClient;
         _storefrontService = storefrontService;
         _logger = logger;
+        _daprClient = daprClient;
     }
 
     [Topic("pizzapubsub", "storefront")]

@@ -45,7 +45,7 @@ public class PizzaOrderingWorkflow : Workflow<Order, Order>
                 nameof(DeliveryActivity),
                 cookingResult);
 
-            var deliveryResult = await context.WaitForExternalEventAsync<Order>("CookComplete");
+            var deliveryResult = await context.WaitForExternalEventAsync<Order>("DeliverComplete");
 
             if (deliveryResult.Status != "delivered")
                 throw new Exception($"Delivery failed: {deliveryResult.Error ?? "Unknown error"}");

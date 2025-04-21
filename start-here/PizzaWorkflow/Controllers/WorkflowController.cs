@@ -1,5 +1,5 @@
 using Dapr;
-using Dapr.Client;
+using Dapr.Workflow;
 using Microsoft.AspNetCore.Mvc;
 using PizzaShared.Messages.Delivery;
 using PizzaShared.Messages.Kitchen;
@@ -13,12 +13,12 @@ namespace PizzaWorkflow.Controllers;
 [Route("[controller]")]
 public class WorkflowController : ControllerBase
 {
-    private readonly DaprClient _daprClient;
+    private readonly DaprWorkflowClient _daprWorkflowClient;
     private readonly ILogger<WorkflowController> _logger;
 
-    public WorkflowController(DaprClient daprClient, ILogger<WorkflowController> logger)
+    public WorkflowController(DaprWorkflowClient daprWorkflowClient, ILogger<WorkflowController> logger)
     {
-        _daprClient = daprClient;
+        _daprWorkflowClient = daprWorkflowClient;
         _logger = logger;
     }
 
@@ -32,11 +32,11 @@ public class WorkflowController : ControllerBase
             _logger.LogInformation("Starting workflow for order {OrderId}", order.OrderId);
 
             //TODO: Start the PizzaOrderingWorkflow workflow
-            await _daprClient.StartWorkflowAsync(
-                "dapr",
+            await _daprWorkflowClient.ScheduleNewWorkflowAsync(
                 nameof(PizzaOrderingWorkflow),
-                input: order,
-                instanceId: instanceId);
+                instanceId,
+                order
+            );
 
             _logger.LogInformation("Workflow started successfully for order {OrderId}", order.OrderId);
 
@@ -65,11 +65,11 @@ public class WorkflowController : ControllerBase
                 validation.OrderId, validation.Approved);
 
             //TODO: Raise the ValidationComplete event
-            await _daprClient.RaiseWorkflowEventAsync(
+            await _daprWorkflowClient.RaiseEventAsync(
                 instanceId,
-                "dapr",
                 "ValidationComplete",
-                validation);
+                validation
+            );
 
             _logger.LogInformation("Validation event raised successfully for order {OrderId}",
                 validation.OrderId);
@@ -97,9 +97,7 @@ public class WorkflowController : ControllerBase
             _logger.LogInformation("Getting workflow status for order {OrderId}", request.OrderId);
 
             //TODO: Get workflow status
-            var status = await _daprClient.GetWorkflowAsync(
-                instanceId,
-                "dapr");
+            var status = await _daprWorkflowClient.GetWorkflowStateAsync(instanceId);
 
             _logger.LogInformation("Workflow status retrieved successfully for order {OrderId}", request.OrderId);
 
@@ -126,9 +124,7 @@ public class WorkflowController : ControllerBase
             _logger.LogInformation("Pausing workflow for order {OrderId}", request.OrderId);
 
             //TODO: Pause workflow
-            await _daprClient.PauseWorkflowAsync(
-                instanceId,
-                "dapr");
+            await _daprWorkflowClient.SuspendWorkflowAsync(instanceId);
 
             _logger.LogInformation("Workflow paused successfully for order {OrderId}", request.OrderId);
 
@@ -155,9 +151,7 @@ public class WorkflowController : ControllerBase
             _logger.LogInformation("Resuming workflow for order {OrderId}", request.OrderId);
 
             //TODO: Resume workflow
-            await _daprClient.ResumeWorkflowAsync(
-                instanceId,
-                "dapr");
+            await _daprWorkflowClient.ResumeWorkflowAsync(instanceId);
 
             _logger.LogInformation("Workflow resumed successfully for order {OrderId}", request.OrderId);
 
@@ -184,9 +178,7 @@ public class WorkflowController : ControllerBase
             _logger.LogInformation("Cancelling workflow for order {OrderId}", request.OrderId);
 
             // TODO: Implement workflow termination call
-            await _daprClient.TerminateWorkflowAsync(
-                instanceId,
-                "dapr");
+            await _daprWorkflowClient.TerminateWorkflowAsync(instanceId);
 
             _logger.LogInformation("Workflow cancelled successfully for order {OrderId}", request.OrderId);
 
@@ -235,10 +227,10 @@ public class WorkflowController : ControllerBase
 
     private async Task RaiseEventAsync(string eventName, Order order, string workflowId)
     {
-        await _daprClient.RaiseWorkflowEventAsync(
+        await _daprWorkflowClient.RaiseEventAsync(
             workflowId,
-            "dapr",
             eventName,
-            order);
+            order
+        );
     }
 }
