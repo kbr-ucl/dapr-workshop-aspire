@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace PizzaWorkflow.Models;
+namespace PizzaStorefront.Models;
 
 public class Order
 {

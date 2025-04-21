@@ -13,23 +13,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaStorefront", "PizzaSto
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaWorkflow", "PizzaWorkflow\PizzaWorkflow.csproj", "{A0E3DCD7-5D2E-4EAC-B97F-0F079B2CBBBA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
-	ProjectSection(SolutionItems) = preProject
-		Endpoints.http = Endpoints.http
-		resources\pubsub.yaml = resources\pubsub.yaml
-		resources\statestore.yaml = resources\statestore.yaml
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DaprWorkshop.AppHost", "DaprWorkshop.AppHost\DaprWorkshop.AppHost.csproj", "{E4AD8E69-755D-4124-A615-1840E970990A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DaprWorkshop.ServiceDefaults", "DaprWorkshop.ServiceDefaults\DaprWorkshop.ServiceDefaults.csproj", "{DA025439-1CC0-3C60-A7ED-E799A5275CB7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaShared", "PizzaShared\PizzaShared.csproj", "{10FB0ECD-7586-4301-90B9-0D59C44CDB46}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{9CDDFCAB-DBDE-4D0D-A83F-0E741E58EA3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -52,27 +42,5 @@ Global
 		{A0E3DCD7-5D2E-4EAC-B97F-0F079B2CBBBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0E3DCD7-5D2E-4EAC-B97F-0F079B2CBBBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0E3DCD7-5D2E-4EAC-B97F-0F079B2CBBBA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E4AD8E69-755D-4124-A615-1840E970990A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E4AD8E69-755D-4124-A615-1840E970990A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E4AD8E69-755D-4124-A615-1840E970990A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E4AD8E69-755D-4124-A615-1840E970990A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DA025439-1CC0-3C60-A7ED-E799A5275CB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DA025439-1CC0-3C60-A7ED-E799A5275CB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DA025439-1CC0-3C60-A7ED-E799A5275CB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DA025439-1CC0-3C60-A7ED-E799A5275CB7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{10FB0ECD-7586-4301-90B9-0D59C44CDB46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{10FB0ECD-7586-4301-90B9-0D59C44CDB46}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{10FB0ECD-7586-4301-90B9-0D59C44CDB46}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{10FB0ECD-7586-4301-90B9-0D59C44CDB46}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D1786E2B-CAA0-4B2D-A974-9845EB9E420F}.Debug|Any CPU.ActiveCfg = Debug
-		{D1786E2B-CAA0-4B2D-A974-9845EB9E420F}.Debug|Any CPU.Build.0 = Debug
-		{D1786E2B-CAA0-4B2D-A974-9845EB9E420F}.Release|Any CPU.ActiveCfg = Release
-		{D1786E2B-CAA0-4B2D-A974-9845EB9E420F}.Release|Any CPU.Build.0 = Release
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {0335A4FB-D53B-4404-A2E6-EE1FF1143E84}
 	EndGlobalSection
 EndGlobal

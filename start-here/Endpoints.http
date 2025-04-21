@@ -4,7 +4,6 @@
 @pizzaKitchenUrl = http://localhost:8003
 @pizzaDeliveryUrl = http://localhost:8004
 @pizzaWorkflowUrl = http://localhost:8005
-@workflow_dapr_url = http://localhost:3505
 
 ### Direct Pizza Order Endpoint (for testing)
 POST {{pizzaOrderUrl}}/order
@@ -79,9 +78,14 @@ Content-Type: application/json
     }
 }
 
+@wfrequest = {}
+
+// @name wfrequest
+@workflow_dapr_url = http://localhost:3504
+
 ### Start workflow endpoint using Dapr API
-@name wfrequest
-POST {{workflow_dapr_url}}/v1.0-beta1/workflows/dapr/PizzaOrderingWorkflow/start?instanceID=pizza-order-3
+
+POST {{workflow_dapr_url}}/v1.0-beta1/workflows/dapr/PizzaOrderingWorkflow/start?instanceID=pizza-order-1
 Content-Type: application/json
 
 {
