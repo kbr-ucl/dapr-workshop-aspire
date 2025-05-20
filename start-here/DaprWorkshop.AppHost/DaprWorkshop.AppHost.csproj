@@ -9,7 +9,7 @@
     <UserSecretsId>b58d2585-8e68-4637-b707-5a6c1182347c</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.2.1" />
+    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.3.0" />
     <PackageReference Include="CommunityToolkit.Aspire.Hosting.Dapr" Version="9.4.0" />
   </ItemGroup>
   <ItemGroup>
