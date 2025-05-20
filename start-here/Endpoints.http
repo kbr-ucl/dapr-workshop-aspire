@@ -5,6 +5,7 @@
 @pizzaDeliveryUrl = http://localhost:8004
 @pizzaWorkflowUrl = http://localhost:8005
 @workflow_dapr_url = http://localhost:3505
+@storefront_dapr_url = http://localhost:3502
 
 ### Direct Pizza Order Endpoint (for testing)
 POST {{pizzaOrderUrl}}/order
@@ -29,6 +30,21 @@ DELETE {{pizzaOrderUrl}}/order/123
 
 ### Direct Pizza Store Endpoint (for testing)
 POST {{pizzaStorefrontUrl}}/storefront/order
+Content-Type: application/json
+
+{
+    "orderId": "123",
+    "pizzaType": "pepperoni",
+    "size": "large",
+    "customer": {
+        "name": "John Doe",
+        "address": "123 Main St",
+        "phone": "555-0123"
+    }
+}
+
+### Direct Pizza Store Endpoint (for testing) using Dapr API
+POST {{storefront_dapr_url}}/v1.0/invoke/pizza-storefront/method/storefront/order
 Content-Type: application/json
 
 {
