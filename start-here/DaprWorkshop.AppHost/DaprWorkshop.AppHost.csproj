@@ -9,8 +9,8 @@
     <UserSecretsId>b58d2585-8e68-4637-b707-5a6c1182347c</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.3.1" />
-    <PackageReference Include="CommunityToolkit.Aspire.Hosting.Dapr" Version="9.5.0" />
+    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.4.0" />
+    <PackageReference Include="CommunityToolkit.Aspire.Hosting.Dapr" Version="9.7.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PizzaDelivery\PizzaDelivery.csproj" />
