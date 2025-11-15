@@ -1,8 +1,17 @@
 using CommunityToolkit.Aspire.Hosting.Dapr;
+using System.Collections.Immutable;
 using Projects;
 
 var builder = DistributedApplication.CreateBuilder(args);
-//var statestore = builder.AddDaprStateStore("pizzastatestore");
+
+
+builder.AddProject<PizzaOrder>("pizzaorderservice")
+    .WithDaprSidecar(new DaprSidecarOptions
+    {
+        AppId = "pizza-order",
+        DaprHttpPort = 3501,
+        ResourcesPaths = ImmutableHashSet.Create("../resources")
+    });
 
 
 builder.AddProject<PizzaStorefront>("pizzastorefrontservice")
@@ -12,13 +21,6 @@ builder.AddProject<PizzaStorefront>("pizzastorefrontservice")
         DaprHttpPort = 3502
     });
 
-//builder.AddProject<PizzaOrder>("pizzaorderservice")
-//    .WithDaprSidecar(new DaprSidecarOptions
-//    {
-//        AppId = "pizza-order",
-//        DaprHttpPort = 3501
-//    })
-//    .WithReference(statestore);
 
 builder.AddProject<PizzaKitchen>("pizzakitchenservice")
     .WithDaprSidecar(new DaprSidecarOptions
